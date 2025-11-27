@@ -300,6 +300,7 @@
             color: #d4d4d4;
             font-family: 'Consolas', 'Monaco', monospace;
             line-height: 1.5;
+            white-space: pre-wrap;
         }
 
         .code-keyword {
@@ -347,6 +348,128 @@
 
         .tab-content.active {
             display: block;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        /* Visualization */
+        .visualization {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background-color: var(--bg);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
+        .visualization-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .array-visual {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .array-element {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .array-element.active {
+            background-color: var(--accent);
+        }
+
+        .array-element.found {
+            background-color: var(--secondary);
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .control-input {
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background-color: var(--card-bg);
+            color: var(--text);
+        }
+
+        .control-btn {
+            padding: 0.5rem 1rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+        }
+
+        .control-btn:hover {
+            background-color: var(--primary-dark);
         }
 
         /* Footer */
@@ -444,7 +567,7 @@
                 <div class="nav-actions">
                     <div class="search-box">
                         <i class="fas fa-search"></i>
-                        <input type="text" placeholder="Search algorithms...">
+                        <input type="text" placeholder="Search algorithms..." id="searchInput">
                     </div>
                     <button class="theme-toggle" id="themeToggle">
                         <i class="fas fa-moon"></i>
@@ -458,7 +581,7 @@
         <div class="container">
             <h1>Master Algorithms & Data Structures</h1>
             <p>Learn, visualize, and implement essential algorithms and data structures with interactive examples and code implementations.</p>
-            <button class="cta-button">Start Learning Now</button>
+            <button class="cta-button" id="startLearningBtn">Start Learning Now</button>
         </div>
     </section>
 
@@ -468,51 +591,8 @@
                 <h2 class="section-title">Popular Algorithms</h2>
                 <a href="#" class="view-all">View All</a>
             </div>
-            <div class="cards-grid">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Binary Search</h3>
-                        <p class="card-description">Efficiently find an element in a sorted array</p>
-                    </div>
-                    <div class="card-body">
-                        <p>Time Complexity: O(log n)</p>
-                        <p>Space Complexity: O(1)</p>
-                    </div>
-                    <div class="card-footer">
-                        <button class="btn btn-outline">Pseudocode</button>
-                        <button class="btn btn-primary">View Implementation</button>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Quick Sort</h3>
-                        <p class="card-description">Divide and conquer sorting algorithm</p>
-                    </div>
-                    <div class="card-body">
-                        <p>Time Complexity: O(n log n)</p>
-                        <p>Space Complexity: O(log n)</p>
-                    </div>
-                    <div class="card-footer">
-                        <button class="btn btn-outline">Pseudocode</button>
-                        <button class="btn btn-primary">View Implementation</button>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Dijkstra's Algorithm</h3>
-                        <p class="card-description">Find shortest paths in weighted graphs</p>
-                    </div>
-                    <div class="card-body">
-                        <p>Time Complexity: O(V²)</p>
-                        <p>Space Complexity: O(V)</p>
-                    </div>
-                    <div class="card-footer">
-                        <button class="btn btn-outline">Pseudocode</button>
-                        <button class="btn btn-primary">View Implementation</button>
-                    </div>
-                </div>
+            <div class="cards-grid" id="algorithmCards">
+                <!-- Algorithm cards will be generated by JavaScript -->
             </div>
         </section>
 
@@ -521,51 +601,8 @@
                 <h2 class="section-title">Data Structures</h2>
                 <a href="#" class="view-all">View All</a>
             </div>
-            <div class="cards-grid">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Arrays</h3>
-                        <p class="card-description">Contiguous memory data structure</p>
-                    </div>
-                    <div class="card-body">
-                        <p>Access: O(1)</p>
-                        <p>Search: O(n)</p>
-                    </div>
-                    <div class="card-footer">
-                        <button class="btn btn-outline">Theory</button>
-                        <button class="btn btn-primary">View Implementation</button>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Stacks</h3>
-                        <p class="card-description">LIFO (Last In First Out) structure</p>
-                    </div>
-                    <div class="card-body">
-                        <p>Push: O(1)</p>
-                        <p>Pop: O(1)</p>
-                    </div>
-                    <div class="card-footer">
-                        <button class="btn btn-outline">Theory</button>
-                        <button class="btn btn-primary">View Implementation</button>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Trees</h3>
-                        <p class="card-description">Hierarchical data structure</p>
-                    </div>
-                    <div class="card-body">
-                        <p>Search: O(log n)</p>
-                        <p>Insert: O(log n)</p>
-                    </div>
-                    <div class="card-footer">
-                        <button class="btn btn-outline">Theory</button>
-                        <button class="btn btn-primary">View Implementation</button>
-                    </div>
-                </div>
+            <div class="cards-grid" id="dataStructureCards">
+                <!-- Data structure cards will be generated by JavaScript -->
             </div>
         </section>
 
@@ -579,13 +616,14 @@
                 <div class="tab" data-tab="stack">Stack</div>
                 <div class="tab" data-tab="queue">Queue</div>
                 <div class="tab" data-tab="tree">Tree</div>
+                <div class="tab" data-tab="expression">Expression Conversion</div>
             </div>
             
             <div class="tab-content active" id="array-tab">
                 <div class="code-container">
                     <div class="code-header">
                         <span>Python Implementation</span>
-                        <button class="btn btn-outline" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;">
+                        <button class="btn btn-outline copy-btn" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;">
                             <i class="fas fa-copy"></i> Copy
                         </button>
                     </div>
@@ -612,8 +650,37 @@
         <span class="code-keyword">for</span> i <span class="code-keyword">in</span> range(index, <span class="code-keyword">self</span>.length-1):
             <span class="code-keyword">self</span>.data[i] = <span class="code-keyword">self</span>.data[i+1]
         <span class="code-keyword">del</span> <span class="code-keyword">self</span>.data[<span class="code-keyword">self</span>.length-1]
-        <span class="code-keyword">self</span>.length -= 1</code></pre>
+        <span class="code-keyword">self</span>.length -= 1
+
+<span class="code-comment"># Example usage</span>
+arr = Array()
+arr.push(10)
+arr.push(20)
+arr.push(30)
+print(arr.get(1))  <span class="code-comment"># Output: 20</span>
+arr.delete(1)
+print(arr.get(1))  <span class="code-comment"># Output: 30</span></code></pre>
                     </div>
+                </div>
+                
+                <div class="visualization">
+                    <h3 class="visualization-title">Array Visualization</h3>
+                    <div class="array-visual" id="arrayVisual">
+                        <div class="array-element">5</div>
+                        <div class="array-element">2</div>
+                        <div class="array-element">8</div>
+                        <div class="array-element">1</div>
+                        <div class="array-element">9</div>
+                    </div>
+                    <div class="controls">
+                        <input type="number" class="control-input" id="arrayValue" placeholder="Enter value">
+                        <button class="control-btn" id="arrayPushBtn">Push</button>
+                        <button class="control-btn" id="arrayPopBtn">Pop</button>
+                        <input type="number" class="control-input" id="arrayIndex" placeholder="Index">
+                        <button class="control-btn" id="arrayGetBtn">Get</button>
+                        <button class="control-btn" id="arrayDeleteBtn">Delete</button>
+                    </div>
+                    <div id="arrayOutput"></div>
                 </div>
             </div>
             
@@ -621,7 +688,7 @@
                 <div class="code-container">
                     <div class="code-header">
                         <span>Python Implementation</span>
-                        <button class="btn btn-outline" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;">
+                        <button class="btn btn-outline copy-btn" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;">
                             <i class="fas fa-copy"></i> Copy
                         </button>
                     </div>
@@ -647,11 +714,114 @@
         <span class="code-keyword">return</span> len(<span class="code-keyword">self</span>.items) == 0
     
     <span class="code-keyword">def</span> <span class="code-function">size</span>(<span class="code-keyword">self</span>):
-        <span class="code-keyword">return</span> len(<span class="code-keyword">self</span>.items)</code></pre>
+        <span class="code-keyword">return</span> len(<span class="code-keyword">self</span>.items)
+
+<span class="code-comment"># Example usage</span>
+stack = Stack()
+stack.push(10)
+stack.push(20)
+stack.push(30)
+print(stack.pop())  <span class="code-comment"># Output: 30</span>
+print(stack.peek()) <span class="code-comment"># Output: 20</span></code></pre>
                     </div>
+                </div>
+                
+                <div class="visualization">
+                    <h3 class="visualization-title">Stack Visualization</h3>
+                    <div class="array-visual" id="stackVisual" style="flex-direction: column-reverse;">
+                        <!-- Stack elements will be added here -->
+                    </div>
+                    <div class="controls">
+                        <input type="number" class="control-input" id="stackValue" placeholder="Enter value">
+                        <button class="control-btn" id="stackPushBtn">Push</button>
+                        <button class="control-btn" id="stackPopBtn">Pop</button>
+                        <button class="control-btn" id="stackPeekBtn">Peek</button>
+                    </div>
+                    <div id="stackOutput"></div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="expression-tab">
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Python Implementation - Expression Conversion</span>
+                        <button class="btn btn-outline copy-btn" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code><span class="code-keyword">def</span> <span class="code-function">infix_to_postfix</span>(expression):
+    precedence = {'+': 1, '-': 1, '*': 2, '/': 2, '^': 3}
+    output = []
+    stack = []
+    
+    <span class="code-keyword">for</span> char <span class="code-keyword">in</span> expression:
+        <span class="code-keyword">if</span> char.isalnum():
+            output.append(char)
+        <span class="code-keyword">elif</span> char == '(':
+            stack.append(char)
+        <span class="code-keyword">elif</span> char == ')':
+            <span class="code-keyword">while</span> stack <span class="code-keyword">and</span> stack[-1] != '(':
+                output.append(stack.pop())
+            stack.pop()
+        <span class="code-keyword">else</span>:
+            <span class="code-keyword">while</span> (stack <span class="code-keyword">and</span> stack[-1] != '(' <span class="code-keyword">and</span> 
+                   precedence.get(char, 0) <= precedence.get(stack[-1], 0)):
+                output.append(stack.pop())
+            stack.append(char)
+    
+    <span class="code-keyword">while</span> stack:
+        output.append(stack.pop())
+    
+    <span class="code-keyword">return</span> ''.join(output)
+
+<span class="code-comment"># Example usage</span>
+infix = "a+b*(c^d-e)^(f+g*h)-i"
+postfix = infix_to_postfix(infix)
+print(<span class="code-string">"Infix:"</span>, infix)
+print(<span class="code-string">"Postfix:"</span>, postfix)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="visualization">
+                    <h3 class="visualization-title">Expression Conversion</h3>
+                    <div class="controls">
+                        <input type="text" class="control-input" id="expressionInput" placeholder="Enter infix expression" value="a+b*(c^d-e)^(f+g*h)-i" style="width: 300px;">
+                        <button class="control-btn" id="convertBtn">Convert to Postfix</button>
+                    </div>
+                    <div id="expressionOutput" style="margin-top: 1rem; font-family: monospace;"></div>
                 </div>
             </div>
         </section>
+    </div>
+
+    <!-- Modal for Algorithm Details -->
+    <div class="modal" id="algorithmModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalAlgorithmTitle">Algorithm Details</h2>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="tabs">
+                    <div class="tab active" data-tab="pseudocode">Pseudocode</div>
+                    <div class="tab" data-tab="implementation">Implementation</div>
+                    <div class="tab" data-tab="visualization">Visualization</div>
+                </div>
+                
+                <div class="tab-content active" id="pseudocode-tab">
+                    <div id="pseudocodeContent"></div>
+                </div>
+                
+                <div class="tab-content" id="implementation-tab">
+                    <div id="implementationContent"></div>
+                </div>
+                
+                <div class="tab-content" id="visualization-tab">
+                    <div id="visualizationContent"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <footer>
@@ -701,12 +871,813 @@
     </footer>
 
     <script>
-        // Theme Toggle
-        const themeToggle = document.getElementById('themeToggle');
-        const themeIcon = themeToggle.querySelector('i');
+        // Data for algorithms and data structures
+        const algorithms = [
+            {
+                id: 1,
+                name: "Binary Search",
+                description: "Efficiently find an element in a sorted array",
+                timeComplexity: "O(log n)",
+                spaceComplexity: "O(1)",
+                pseudocode: `function binarySearch(arr, target):
+    left = 0
+    right = length(arr) - 1
+    
+    while left <= right:
+        mid = floor((left + right) / 2)
         
-        themeToggle.addEventListener('click', () => {
+        if arr[mid] == target:
+            return mid
+        else if arr[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    
+    return -1`,
+                implementation: `def binary_search(arr, target):
+    left = 0
+    right = len(arr) - 1
+    
+    while left <= right:
+        mid = (left + right) // 2
+        
+        if arr[mid] == target:
+            return mid
+        elif arr[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    
+    return -1`,
+                category: "search"
+            },
+            {
+                id: 2,
+                name: "Quick Sort",
+                description: "Divide and conquer sorting algorithm",
+                timeComplexity: "O(n log n)",
+                spaceComplexity: "O(log n)",
+                pseudocode: `function quickSort(arr, low, high):
+    if low < high:
+        pi = partition(arr, low, high)
+        quickSort(arr, low, pi - 1)
+        quickSort(arr, pi + 1, high)
+
+function partition(arr, low, high):
+    pivot = arr[high]
+    i = low - 1
+    
+    for j from low to high - 1:
+        if arr[j] < pivot:
+            i = i + 1
+            swap arr[i] and arr[j]
+    
+    swap arr[i + 1] and arr[high]
+    return i + 1`,
+                implementation: `def quick_sort(arr, low, high):
+    if low < high:
+        pi = partition(arr, low, high)
+        quick_sort(arr, low, pi - 1)
+        quick_sort(arr, pi + 1, high)
+
+def partition(arr, low, high):
+    pivot = arr[high]
+    i = low - 1
+    
+    for j in range(low, high):
+        if arr[j] < pivot:
+            i += 1
+            arr[i], arr[j] = arr[j], arr[i]
+    
+    arr[i + 1], arr[high] = arr[high], arr[i + 1]
+    return i + 1`,
+                category: "sort"
+            },
+            {
+                id: 3,
+                name: "Dijkstra's Algorithm",
+                description: "Find shortest paths in weighted graphs",
+                timeComplexity: "O(V²)",
+                spaceComplexity: "O(V)",
+                pseudocode: `function dijkstra(graph, source):
+    dist[source] = 0
+    create vertex set Q
+    
+    for each vertex v in graph:
+        if v != source:
+            dist[v] = INFINITY
+        add v to Q
+    
+    while Q is not empty:
+        u = vertex in Q with min dist[u]
+        remove u from Q
+        
+        for each neighbor v of u:
+            alt = dist[u] + length(u, v)
+            if alt < dist[v]:
+                dist[v] = alt
+    
+    return dist`,
+                implementation: `import heapq
+
+def dijkstra(graph, start):
+    distances = {node: float('infinity') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    
+    while pq:
+        current_distance, current_node = heapq.heappop(pq)
+        
+        if current_distance > distances[current_node]:
+            continue
+            
+        for neighbor, weight in graph[current_node].items():
+            distance = current_distance + weight
+            
+            if distance < distances[neighbor]:
+                distances[neighbor] = distance
+                heapq.heappush(pq, (distance, neighbor))
+    
+    return distances`,
+                category: "graph"
+            },
+            {
+                id: 4,
+                name: "Breadth-First Search",
+                description: "Traverse or search tree/graph data structures",
+                timeComplexity: "O(V + E)",
+                spaceComplexity: "O(V)",
+                pseudocode: `function BFS(graph, start):
+    create a queue Q
+    mark start as visited and enqueue it to Q
+    
+    while Q is not empty:
+        vertex = Q.dequeue()
+        process vertex
+        
+        for each neighbor of vertex:
+            if neighbor is not visited:
+                mark neighbor as visited
+                enqueue neighbor to Q`,
+                implementation: `from collections import deque
+
+def bfs(graph, start):
+    visited = set()
+    queue = deque([start])
+    visited.add(start)
+    
+    while queue:
+        vertex = queue.popleft()
+        print(vertex, end=" ")
+        
+        for neighbor in graph[vertex]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)`,
+                category: "graph"
+            },
+            {
+                id: 5,
+                name: "Depth-First Search",
+                description: "Traverse or search tree/graph data structures",
+                timeComplexity: "O(V + E)",
+                spaceComplexity: "O(V)",
+                pseudocode: `function DFS(graph, start):
+    create a stack S
+    mark start as visited and push it to S
+    
+    while S is not empty:
+        vertex = S.pop()
+        process vertex
+        
+        for each neighbor of vertex:
+            if neighbor is not visited:
+                mark neighbor as visited
+                push neighbor to S`,
+                implementation: `def dfs(graph, start, visited=None):
+    if visited is None:
+        visited = set()
+    
+    visited.add(start)
+    print(start, end=" ")
+    
+    for neighbor in graph[start]:
+        if neighbor not in visited:
+            dfs(graph, neighbor, visited)`,
+                category: "graph"
+            },
+            {
+                id: 6,
+                name: "Merge Sort",
+                description: "Divide and conquer sorting algorithm",
+                timeComplexity: "O(n log n)",
+                spaceComplexity: "O(n)",
+                pseudocode: `function mergeSort(arr):
+    if length(arr) <= 1:
+        return arr
+    
+    mid = length(arr) // 2
+    left = mergeSort(arr[0:mid])
+    right = mergeSort(arr[mid:end])
+    
+    return merge(left, right)
+
+function merge(left, right):
+    result = []
+    i = 0, j = 0
+    
+    while i < length(left) and j < length(right):
+        if left[i] <= right[j]:
+            result.append(left[i])
+            i = i + 1
+        else:
+            result.append(right[j])
+            j = j + 1
+    
+    result.append(left[i:end])
+    result.append(right[j:end])
+    return result`,
+                implementation: `def merge_sort(arr):
+    if len(arr) <= 1:
+        return arr
+    
+    mid = len(arr) // 2
+    left = merge_sort(arr[:mid])
+    right = merge_sort(arr[mid:])
+    
+    return merge(left, right)
+
+def merge(left, right):
+    result = []
+    i = j = 0
+    
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+    
+    result.extend(left[i:])
+    result.extend(right[j:])
+    return result`,
+                category: "sort"
+            },
+            {
+                id: 7,
+                name: "Insertion Sort",
+                description: "Simple comparison-based sorting algorithm",
+                timeComplexity: "O(n²)",
+                spaceComplexity: "O(1)",
+                pseudocode: `function insertionSort(arr):
+    for i from 1 to length(arr) - 1:
+        key = arr[i]
+        j = i - 1
+        
+        while j >= 0 and arr[j] > key:
+            arr[j + 1] = arr[j]
+            j = j - 1
+        
+        arr[j + 1] = key`,
+                implementation: `def insertion_sort(arr):
+    for i in range(1, len(arr)):
+        key = arr[i]
+        j = i - 1
+        
+        while j >= 0 and arr[j] > key:
+            arr[j + 1] = arr[j]
+            j -= 1
+        
+        arr[j + 1] = key`,
+                category: "sort"
+            },
+            {
+                id: 8,
+                name: "Selection Sort",
+                description: "Simple comparison-based sorting algorithm",
+                timeComplexity: "O(n²)",
+                spaceComplexity: "O(1)",
+                pseudocode: `function selectionSort(arr):
+    for i from 0 to length(arr) - 1:
+        minIndex = i
+        
+        for j from i + 1 to length(arr) - 1:
+            if arr[j] < arr[minIndex]:
+                minIndex = j
+        
+        swap arr[i] and arr[minIndex]`,
+                implementation: `def selection_sort(arr):
+    for i in range(len(arr)):
+        min_index = i
+        
+        for j in range(i + 1, len(arr)):
+            if arr[j] < arr[min_index]:
+                min_index = j
+        
+        arr[i], arr[min_index] = arr[min_index], arr[i]`,
+                category: "sort"
+            },
+            {
+                id: 9,
+                name: "Bubble Sort",
+                description: "Simple comparison-based sorting algorithm",
+                timeComplexity: "O(n²)",
+                spaceComplexity: "O(1)",
+                pseudocode: `function bubbleSort(arr):
+    n = length(arr)
+    
+    for i from 0 to n - 1:
+        for j from 0 to n - i - 2:
+            if arr[j] > arr[j + 1]:
+                swap arr[j] and arr[j + 1]`,
+                implementation: `def bubble_sort(arr):
+    n = len(arr)
+    
+    for i in range(n):
+        for j in range(0, n - i - 1):
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]`,
+                category: "sort"
+            },
+            {
+                id: 10,
+                name: "Linear Search",
+                description: "Sequentially check each element in a collection",
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(1)",
+                pseudocode: `function linearSearch(arr, target):
+    for i from 0 to length(arr) - 1:
+        if arr[i] == target:
+            return i
+    
+    return -1`,
+                implementation: `def linear_search(arr, target):
+    for i in range(len(arr)):
+        if arr[i] == target:
+            return i
+    
+    return -1`,
+                category: "search"
+            }
+        ];
+
+        const dataStructures = [
+            {
+                id: 1,
+                name: "Arrays",
+                description: "Contiguous memory data structure",
+                operations: [
+                    { name: "Access", complexity: "O(1)" },
+                    { name: "Search", complexity: "O(n)" },
+                    { name: "Insertion", complexity: "O(n)" },
+                    { name: "Deletion", complexity: "O(n)" }
+                ]
+            },
+            {
+                id: 2,
+                name: "Stacks",
+                description: "LIFO (Last In First Out) structure",
+                operations: [
+                    { name: "Push", complexity: "O(1)" },
+                    { name: "Pop", complexity: "O(1)" },
+                    { name: "Peek", complexity: "O(1)" },
+                    { name: "Search", complexity: "O(n)" }
+                ]
+            },
+            {
+                id: 3,
+                name: "Queues",
+                description: "FIFO (First In First Out) structure",
+                operations: [
+                    { name: "Enqueue", complexity: "O(1)" },
+                    { name: "Dequeue", complexity: "O(1)" },
+                    { name: "Peek", complexity: "O(1)" },
+                    { name: "Search", complexity: "O(n)" }
+                ]
+            },
+            {
+                id: 4,
+                name: "Trees",
+                description: "Hierarchical data structure",
+                operations: [
+                    { name: "Search", complexity: "O(log n)" },
+                    { name: "Insert", complexity: "O(log n)" },
+                    { name: "Delete", complexity: "O(log n)" },
+                    { name: "Traversal", complexity: "O(n)" }
+                ]
+            }
+        ];
+
+        // DOM Elements
+        const algorithmCardsContainer = document.getElementById('algorithmCards');
+        const dataStructureCardsContainer = document.getElementById('dataStructureCards');
+        const algorithmModal = document.getElementById('algorithmModal');
+        const modalAlgorithmTitle = document.getElementById('modalAlgorithmTitle');
+        const pseudocodeContent = document.getElementById('pseudocodeContent');
+        const implementationContent = document.getElementById('implementationContent');
+        const visualizationContent = document.getElementById('visualizationContent');
+        const modalClose = document.getElementById('modalClose');
+        const themeToggle = document.getElementById('themeToggle');
+        const searchInput = document.getElementById('searchInput');
+        const startLearningBtn = document.getElementById('startLearningBtn');
+
+        // Initialize the application
+        function init() {
+            renderAlgorithmCards();
+            renderDataStructureCards();
+            setupEventListeners();
+            initializeVisualizations();
+        }
+
+        // Render algorithm cards
+        function renderAlgorithmCards() {
+            algorithmCardsContainer.innerHTML = '';
+            
+            algorithms.forEach(algorithm => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="card-header">
+                        <h3 class="card-title">${algorithm.name}</h3>
+                        <p class="card-description">${algorithm.description}</p>
+                    </div>
+                    <div class="card-body">
+                        <p>Time Complexity: ${algorithm.timeComplexity}</p>
+                        <p>Space Complexity: ${algorithm.spaceComplexity}</p>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-outline pseudocode-btn" data-id="${algorithm.id}">Pseudocode</button>
+                        <button class="btn btn-primary implementation-btn" data-id="${algorithm.id}">View Implementation</button>
+                    </div>
+                `;
+                algorithmCardsContainer.appendChild(card);
+            });
+        }
+
+        // Render data structure cards
+        function renderDataStructureCards() {
+            dataStructureCardsContainer.innerHTML = '';
+            
+            dataStructures.forEach(ds => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                
+                let operationsHTML = '';
+                ds.operations.forEach(op => {
+                    operationsHTML += `<p>${op.name}: ${op.complexity}</p>`;
+                });
+                
+                card.innerHTML = `
+                    <div class="card-header">
+                        <h3 class="card-title">${ds.name}</h3>
+                        <p class="card-description">${ds.description}</p>
+                    </div>
+                    <div class="card-body">
+                        ${operationsHTML}
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-outline">Theory</button>
+                        <button class="btn btn-primary">View Implementation</button>
+                    </div>
+                `;
+                dataStructureCardsContainer.appendChild(card);
+            });
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Theme toggle
+            themeToggle.addEventListener('click', toggleTheme);
+            
+            // Modal close
+            modalClose.addEventListener('click', () => {
+                algorithmModal.classList.remove('active');
+            });
+            
+            // Close modal when clicking outside
+            algorithmModal.addEventListener('click', (e) => {
+                if (e.target === algorithmModal) {
+                    algorithmModal.classList.remove('active');
+                }
+            });
+            
+            // Algorithm card buttons
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('pseudocode-btn')) {
+                    const algorithmId = parseInt(e.target.getAttribute('data-id'));
+                    showAlgorithmModal(algorithmId, 'pseudocode');
+                } else if (e.target.classList.contains('implementation-btn')) {
+                    const algorithmId = parseInt(e.target.getAttribute('data-id'));
+                    showAlgorithmModal(algorithmId, 'implementation');
+                }
+            });
+            
+            // Tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    
+                    // Remove active class from all tabs and contents
+                    tabs.forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+                    
+                    // Add active class to current tab and content
+                    tab.classList.add('active');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+            
+            // Modal tabs
+            const modalTabs = algorithmModal.querySelectorAll('.tab');
+            modalTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    
+                    // Remove active class from all tabs and contents
+                    modalTabs.forEach(t => t.classList.remove('active'));
+                    algorithmModal.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+                    
+                    // Add active class to current tab and content
+                    tab.classList.add('active');
+                    algorithmModal.querySelector(`#${tabId}-tab`).classList.add('active');
+                });
+            });
+            
+            // Copy buttons
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('copy-btn') || e.target.closest('.copy-btn')) {
+                    const button = e.target.classList.contains('copy-btn') ? e.target : e.target.closest('.copy-btn');
+                    const codeContainer = button.closest('.code-container');
+                    const codeBlock = codeContainer.querySelector('code');
+                    copyToClipboard(codeBlock.textContent);
+                    
+                    // Visual feedback
+                    const originalText = button.innerHTML;
+                    button.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                    }, 2000);
+                }
+            });
+            
+            // Search functionality
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                filterAlgorithms(searchTerm);
+            });
+            
+            // Start learning button
+            startLearningBtn.addEventListener('click', () => {
+                document.getElementById('algorithms').scrollIntoView({ behavior: 'smooth' });
+            });
+        }
+
+        // Initialize visualizations
+        function initializeVisualizations() {
+            // Array visualization
+            const arrayPushBtn = document.getElementById('arrayPushBtn');
+            const arrayPopBtn = document.getElementById('arrayPopBtn');
+            const arrayGetBtn = document.getElementById('arrayGetBtn');
+            const arrayDeleteBtn = document.getElementById('arrayDeleteBtn');
+            const arrayValueInput = document.getElementById('arrayValue');
+            const arrayIndexInput = document.getElementById('arrayIndex');
+            const arrayOutput = document.getElementById('arrayOutput');
+            const arrayVisual = document.getElementById('arrayVisual');
+            
+            let arrayData = [5, 2, 8, 1, 9];
+            
+            function updateArrayVisual() {
+                arrayVisual.innerHTML = '';
+                arrayData.forEach((value, index) => {
+                    const element = document.createElement('div');
+                    element.className = 'array-element';
+                    element.textContent = value;
+                    arrayVisual.appendChild(element);
+                });
+            }
+            
+            arrayPushBtn.addEventListener('click', () => {
+                const value = arrayValueInput.value;
+                if (value) {
+                    arrayData.push(parseInt(value));
+                    updateArrayVisual();
+                    arrayOutput.textContent = `Pushed ${value} to array`;
+                    arrayValueInput.value = '';
+                }
+            });
+            
+            arrayPopBtn.addEventListener('click', () => {
+                if (arrayData.length > 0) {
+                    const value = arrayData.pop();
+                    updateArrayVisual();
+                    arrayOutput.textContent = `Popped ${value} from array`;
+                } else {
+                    arrayOutput.textContent = 'Array is empty';
+                }
+            });
+            
+            arrayGetBtn.addEventListener('click', () => {
+                const index = parseInt(arrayIndexInput.value);
+                if (index >= 0 && index < arrayData.length) {
+                    const value = arrayData[index];
+                    arrayOutput.textContent = `Value at index ${index} is ${value}`;
+                    
+                    // Highlight the element
+                    const elements = arrayVisual.querySelectorAll('.array-element');
+                    elements.forEach(el => el.classList.remove('active'));
+                    if (elements[index]) {
+                        elements[index].classList.add('active');
+                    }
+                } else {
+                    arrayOutput.textContent = 'Invalid index';
+                }
+            });
+            
+            arrayDeleteBtn.addEventListener('click', () => {
+                const index = parseInt(arrayIndexInput.value);
+                if (index >= 0 && index < arrayData.length) {
+                    const value = arrayData.splice(index, 1)[0];
+                    updateArrayVisual();
+                    arrayOutput.textContent = `Deleted ${value} at index ${index}`;
+                } else {
+                    arrayOutput.textContent = 'Invalid index';
+                }
+            });
+            
+            updateArrayVisual();
+            
+            // Stack visualization
+            const stackPushBtn = document.getElementById('stackPushBtn');
+            const stackPopBtn = document.getElementById('stackPopBtn');
+            const stackPeekBtn = document.getElementById('stackPeekBtn');
+            const stackValueInput = document.getElementById('stackValue');
+            const stackOutput = document.getElementById('stackOutput');
+            const stackVisual = document.getElementById('stackVisual');
+            
+            let stackData = [10, 20, 30];
+            
+            function updateStackVisual() {
+                stackVisual.innerHTML = '';
+                stackData.forEach(value => {
+                    const element = document.createElement('div');
+                    element.className = 'array-element';
+                    element.textContent = value;
+                    stackVisual.appendChild(element);
+                });
+            }
+            
+            stackPushBtn.addEventListener('click', () => {
+                const value = stackValueInput.value;
+                if (value) {
+                    stackData.push(parseInt(value));
+                    updateStackVisual();
+                    stackOutput.textContent = `Pushed ${value} to stack`;
+                    stackValueInput.value = '';
+                }
+            });
+            
+            stackPopBtn.addEventListener('click', () => {
+                if (stackData.length > 0) {
+                    const value = stackData.pop();
+                    updateStackVisual();
+                    stackOutput.textContent = `Popped ${value} from stack`;
+                } else {
+                    stackOutput.textContent = 'Stack is empty';
+                }
+            });
+            
+            stackPeekBtn.addEventListener('click', () => {
+                if (stackData.length > 0) {
+                    const value = stackData[stackData.length - 1];
+                    stackOutput.textContent = `Top element is ${value}`;
+                    
+                    // Highlight the top element
+                    const elements = stackVisual.querySelectorAll('.array-element');
+                    if (elements.length > 0) {
+                        elements.forEach(el => el.classList.remove('active'));
+                        elements[elements.length - 1].classList.add('active');
+                    }
+                } else {
+                    stackOutput.textContent = 'Stack is empty';
+                }
+            });
+            
+            updateStackVisual();
+            
+            // Expression conversion
+            const convertBtn = document.getElementById('convertBtn');
+            const expressionInput = document.getElementById('expressionInput');
+            const expressionOutput = document.getElementById('expressionOutput');
+            
+            convertBtn.addEventListener('click', () => {
+                const infix = expressionInput.value;
+                const postfix = infixToPostfix(infix);
+                expressionOutput.innerHTML = `
+                    <p><strong>Infix:</strong> ${infix}</p>
+                    <p><strong>Postfix:</strong> ${postfix}</p>
+                `;
+            });
+        }
+
+        // Infix to Postfix conversion
+        function infixToPostfix(expression) {
+            const precedence = {'+': 1, '-': 1, '*': 2, '/': 2, '^': 3};
+            let output = [];
+            let stack = [];
+            
+            for (let i = 0; i < expression.length; i++) {
+                let char = expression[i];
+                
+                if (char.match(/[a-zA-Z0-9]/)) {
+                    output.push(char);
+                } else if (char === '(') {
+                    stack.push(char);
+                } else if (char === ')') {
+                    while (stack.length > 0 && stack[stack.length - 1] !== '(') {
+                        output.push(stack.pop());
+                    }
+                    stack.pop(); // Remove '('
+                } else {
+                    while (stack.length > 0 && stack[stack.length - 1] !== '(' && 
+                           precedence[char] <= precedence[stack[stack.length - 1]]) {
+                        output.push(stack.pop());
+                    }
+                    stack.push(char);
+                }
+            }
+            
+            while (stack.length > 0) {
+                output.push(stack.pop());
+            }
+            
+            return output.join('');
+        }
+
+        // Show algorithm modal
+        function showAlgorithmModal(algorithmId, activeTab) {
+            const algorithm = algorithms.find(algo => algo.id === algorithmId);
+            if (!algorithm) return;
+            
+            modalAlgorithmTitle.textContent = algorithm.name;
+            
+            // Set pseudocode content
+            pseudocodeContent.innerHTML = `
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Pseudocode</span>
+                        <button class="btn btn-outline copy-btn" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code>${algorithm.pseudocode}</code></pre>
+                    </div>
+                </div>
+            `;
+            
+            // Set implementation content
+            implementationContent.innerHTML = `
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Python Implementation</span>
+                        <button class="btn btn-outline copy-btn" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code>${algorithm.implementation}</code></pre>
+                    </div>
+                </div>
+            `;
+            
+            // Set visualization content
+            visualizationContent.innerHTML = `
+                <div class="visualization">
+                    <h3 class="visualization-title">${algorithm.name} Visualization</h3>
+                    <p>Visualization for ${algorithm.name} would be displayed here.</p>
+                    <div id="algorithmVisualization"></div>
+                </div>
+            `;
+            
+            // Set active tab
+            const tabs = algorithmModal.querySelectorAll('.tab');
+            const tabContents = algorithmModal.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            tabContents.forEach(tc => tc.classList.remove('active'));
+            
+            algorithmModal.querySelector(`[data-tab="${activeTab}"]`).classList.add('active');
+            algorithmModal.querySelector(`#${activeTab}-tab`).classList.add('active');
+            
+            algorithmModal.classList.add('active');
+        }
+
+        // Toggle theme
+        function toggleTheme() {
             document.body.classList.toggle('dark-mode');
+            const themeIcon = themeToggle.querySelector('i');
             
             if (document.body.classList.contains('dark-mode')) {
                 themeIcon.classList.remove('fa-moon');
@@ -715,46 +1686,36 @@
                 themeIcon.classList.remove('fa-sun');
                 themeIcon.classList.add('fa-moon');
             }
-        });
+        }
 
-        // Tab Functionality
-        const tabs = document.querySelectorAll('.tab');
-        const tabContents = document.querySelectorAll('.tab-content');
-        
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const tabId = tab.getAttribute('data-tab');
-                
-                // Remove active class from all tabs and contents
-                tabs.forEach(t => t.classList.remove('active'));
-                tabContents.forEach(tc => tc.classList.remove('active'));
-                
-                // Add active class to current tab and content
-                tab.classList.add('active');
-                document.getElementById(`${tabId}-tab`).classList.add('active');
-            });
-        });
+        // Copy to clipboard
+        function copyToClipboard(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+        }
 
-        // Copy Code Functionality
-        const copyButtons = document.querySelectorAll('.btn-outline');
-        copyButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const codeBlock = button.closest('.code-container').querySelector('code');
-                const textArea = document.createElement('textarea');
-                textArea.value = codeBlock.textContent;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
+        // Filter algorithms based on search term
+        function filterAlgorithms(searchTerm) {
+            const algorithmCards = document.querySelectorAll('#algorithmCards .card');
+            
+            algorithmCards.forEach(card => {
+                const title = card.querySelector('.card-title').textContent.toLowerCase();
+                const description = card.querySelector('.card-description').textContent.toLowerCase();
                 
-                // Visual feedback
-                const originalText = button.innerHTML;
-                button.innerHTML = '<i class="fas fa-check"></i> Copied!';
-                setTimeout(() => {
-                    button.innerHTML = originalText;
-                }, 2000);
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
             });
-        });
+        }
+
+        // Initialize the application
+        init();
     </script>
 </body>
 </html>
