@@ -1,291 +1,913 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Liquid Glass – iOS 26</title>
-
-<style>
-/* ================= RESET ================= */
-* {
-  box-sizing: border-box;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  color: white;
-  background:
-    url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1800&q=80")
-    center / cover no-repeat fixed;
-}
-
-/* very light darkening */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.15);
-  z-index: -1;
-}
-
-/* ================= LIQUID GLASS ================= */
-.liquid-glass {
-  position: relative;
-  background:
-    linear-gradient(
-      140deg,
-      rgba(255,255,255,0.16),
-      rgba(255,255,255,0.03)
-    );
-  backdrop-filter: blur(3px) saturate(135%);
-  -webkit-backdrop-filter: blur(3px) saturate(135%);
-  border-radius: 26px;
-  border: 1px solid rgba(255,255,255,0.22);
-
-  box-shadow:
-    0 30px 60px rgba(0,0,0,0.35),
-    inset 0 1px 1px rgba(255,255,255,0.75);
-
-  overflow: hidden;
-}
-
-/* liquid light */
-.liquid-glass::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(
-      circle at var(--x, 50%) var(--y, 50%),
-      rgba(255,255,255,0.5),
-      transparent 55%
-    );
-  opacity: 0.45;
-  pointer-events: none;
-}
-
-/* curved edge highlight */
-.liquid-glass::after {
-  content: "";
-  position: absolute;
-  inset: 1px;
-  border-radius: 24px;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255,255,255,0.55),
-      transparent 45%
-    );
-  mix-blend-mode: overlay;
-  pointer-events: none;
-}
-
-/* ================= NAV ================= */
-nav {
-  position: fixed;
-  top: 22px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 14px 28px;
-  display: flex;
-  gap: 24px;
-  z-index: 100;
-}
-
-nav a {
-  color: white;
-  text-decoration: none;
-  font-weight: 500;
-  opacity: 0.9;
-}
-
-/* ================= LAYOUT ================= */
-.container {
-  padding-top: 130px;
-  width: min(1100px, 92%);
-  margin: auto;
-  display: grid;
-  gap: 40px;
-}
-
-.section {
-  padding: 34px;
-}
-
-h1 {
-  margin-top: 0;
-  font-size: 2rem;
-}
-
-p {
-  line-height: 1.6;
-  opacity: 0.95;
-}
-
-/* ================= iOS BUTTON ================= */
-.glass-button {
-  display: inline-block;
-  padding: 14px 24px;
-  border-radius: 999px;
-  margin-right: 10px;
-  margin-top: 10px;
-
-  background:
-    linear-gradient(
-      140deg,
-      rgba(255,255,255,0.38),
-      rgba(255,255,255,0.08)
-    );
-  border: 1px solid rgba(255,255,255,0.35);
-  color: white;
-  font-weight: 500;
-  cursor: pointer;
-  user-select: none;
-
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-
-  box-shadow:
-    0 14px 28px rgba(0,0,0,0.35),
-    inset 0 1px 1px rgba(255,255,255,0.85);
-
-  transition:
-    transform 0.15s ease-out,
-    box-shadow 0.15s ease-out;
-}
-
-/* ================= PROFILE ================= */
-.profile {
-  display: grid;
-  grid-template-columns: 120px 1fr;
-  gap: 24px;
-  align-items: center;
-}
-
-.avatar {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 30% 20%, #ffffffdd, transparent),
-    linear-gradient(135deg, #6dd5ed, #2193b0);
-  box-shadow:
-    inset 0 2px 6px rgba(255,255,255,0.9),
-    0 25px 45px rgba(0,0,0,0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 3rem;
-}
-
-/* ambient glow */
-.light-pool {
-  position: fixed;
-  bottom: -160px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 720px;
-  height: 300px;
-  background:
-    radial-gradient(circle, rgba(255,255,255,0.25), transparent 70%);
-  pointer-events: none;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iOS 26 Liquid Glass</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 400px;
+            min-height: 700px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 30px;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.2),
+                0 0 0 1px rgba(255, 255, 255, 0.1),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.4), 
+                transparent);
+            z-index: 10;
+        }
+        
+        .content {
+            padding: 40px 30px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Login Screen */
+        .login-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+            transition: transform 0.5s ease;
+        }
+        
+        .login-screen.hidden {
+            transform: translateY(-100%);
+            opacity: 0;
+            display: none;
+        }
+        
+        .app-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 22px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 
+                0 10px 20px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .app-icon::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to bottom right, 
+                rgba(255, 255, 255, 0.3) 0%, 
+                rgba(255, 255, 255, 0.1) 50%, 
+                transparent 100%);
+            transform: rotate(30deg);
+        }
+        
+        .app-icon i {
+            font-size: 50px;
+            color: white;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+        
+        .app-title {
+            text-align: center;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #fff, #a8edea);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+        
+        .app-subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 40px;
+            font-weight: 300;
+            font-size: 16px;
+        }
+        
+        /* iOS Style Input */
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .ios-input {
+            width: 100%;
+            padding: 18px 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        
+        .ios-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+        }
+        
+        /* iOS Style Button */
+        .ios-button {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: 
+                0 10px 20px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ios-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, 
+                rgba(255, 255, 255, 0.2) 0%, 
+                rgba(255, 255, 255, 0.1) 50%, 
+                rgba(255, 255, 255, 0) 100%);
+            border-radius: 15px;
+        }
+        
+        .ios-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 15px 25px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+        
+        .ios-button:active {
+            transform: translateY(1px);
+        }
+        
+        .login-footer {
+            text-align: center;
+            margin-top: 30px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+        }
+        
+        /* Dashboard Screen */
+        .dashboard-screen {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .dashboard-screen.active {
+            display: flex;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .greeting h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            background: linear-gradient(90deg, #fff, #a8edea);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .greeting p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+        
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            font-weight: 600;
+            font-size: 20px;
+        }
+        
+        .dashboard-menu {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateX(5px);
+        }
+        
+        .menu-item.active {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .menu-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            font-size: 22px;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 5px 15px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .menu-text {
+            flex-grow: 1;
+        }
+        
+        .menu-text h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .menu-text p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .menu-arrow {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+        }
+        
+        .dashboard-content {
+            flex-grow: 1;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            margin-top: 20px;
+            overflow-y: auto;
+            max-height: 300px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        
+        .content-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .content-text {
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .logout-btn {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: white;
+        }
+        
+        /* Status Bar */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 30px 10px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+            position: relative;
+        }
+        
+        .time {
+            font-weight: 600;
+        }
+        
+        .status-icons {
+            display: flex;
+            gap: 5px;
+        }
+        
+        /* Notch */
+        .notch {
+            width: 180px;
+            height: 25px;
+            background: #000;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 5;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container {
+                border-radius: 20px;
+                min-height: 650px;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+        }
+    </style>
 </head>
-
 <body>
-
-<nav class="liquid-glass">
-  <a href="#home">Home</a>
-  <a href="#about">About</a>
-  <a href="#profile">Profile</a>
-</nav>
-
-<div class="container">
-
-  <section id="home" class="liquid-glass section">
-    <h1>🏠 Home</h1>
-    <p>
-      Ultra-clear liquid glass with real light behavior.
-      Minimal blur, maximum depth.
-    </p>
-    <div>
-      <span class="glass-button ios-btn">Explore</span>
-      <span class="glass-button ios-btn">Refresh</span>
-    </div>
-  </section>
-
-  <section id="about" class="liquid-glass section">
-    <h1>ℹ️ About</h1>
-    <p>
-      JavaScript adds viscosity, pressure, and spring physics —
-      the difference between looking like iOS and *feeling* like iOS.
-    </p>
-  </section>
-
-  <section id="profile" class="liquid-glass section">
-    <h1>👤 Profile</h1>
-    <div class="profile">
-      <div class="avatar">R</div>
-      <div>
-        <p><strong>Name:</strong> Rari</p>
-        <p><strong>Material:</strong> iOS 26 Liquid Glass</p>
-        <div>
-          <span class="glass-button ios-btn">Edit</span>
-          <span class="glass-button ios-btn">Settings</span>
+    <div class="container">
+        <!-- Status Bar (iOS Style) -->
+        <div class="status-bar">
+            <div class="time">9:41</div>
+            <div class="status-icons">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
         </div>
-      </div>
+        
+        <!-- Notch -->
+        <div class="notch"></div>
+        
+        <div class="content">
+            <!-- Login Screen -->
+            <div class="login-screen" id="loginScreen">
+                <div class="app-icon">
+                    <i class="fas fa-cube"></i>
+                </div>
+                
+                <h1 class="app-title">iOS 26</h1>
+                <p class="app-subtitle">Liquid Glass Experience</p>
+                
+                <div class="input-group">
+                    <label class="input-label">Username</label>
+                    <input type="text" class="ios-input" id="username" placeholder="Enter your username">
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Password</label>
+                    <input type="password" class="ios-input" id="password" placeholder="Enter your password">
+                </div>
+                
+                <button class="ios-button" id="loginButton">Sign In</button>
+                
+                <div class="login-footer">
+                    <p>Use any credentials to login</p>
+                    <p>Default: admin / password</p>
+                </div>
+            </div>
+            
+            <!-- Dashboard Screen -->
+            <div class="dashboard-screen" id="dashboardScreen">
+                <div class="header">
+                    <div class="greeting">
+                        <h1 id="greetingText">Welcome</h1>
+                        <p>iOS 26 Liquid Glass Dashboard</p>
+                    </div>
+                    <div class="user-avatar" id="userAvatar">A</div>
+                </div>
+                
+                <div class="dashboard-menu">
+                    <a href="#" class="menu-item active" data-content="home">
+                        <div class="menu-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <div class="menu-text">
+                            <h3>Home</h3>
+                            <p>Main dashboard overview</p>
+                        </div>
+                        <div class="menu-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="menu-item" data-content="profile">
+                        <div class="menu-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="menu-text">
+                            <h3>Profile</h3>
+                            <p>Your personal information</p>
+                        </div>
+                        <div class="menu-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="menu-item" data-content="about">
+                        <div class="menu-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="menu-text">
+                            <h3>About</h3>
+                            <p>About iOS 26 Liquid Glass</p>
+                        </div>
+                        <div class="menu-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="menu-item" data-content="settings">
+                        <div class="menu-icon">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <div class="menu-text">
+                            <h3>Settings</h3>
+                            <p>Customize your experience</p>
+                        </div>
+                        <div class="menu-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="menu-item" data-content="contact">
+                        <div class="menu-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="menu-text">
+                            <h3>Contact</h3>
+                            <p>Get in touch with us</p>
+                        </div>
+                        <div class="menu-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="dashboard-content">
+                    <h2 class="content-title" id="contentTitle">Home</h2>
+                    <div class="content-text" id="contentText">
+                        <p>Welcome to your iOS 26 Liquid Glass dashboard. This interface features the frosted glass effect with dynamic blurring and vibrant accents.</p>
+                        <br>
+                        <p>Navigate through the menu to explore different sections:</p>
+                        <ul style="margin-top: 10px; padding-left: 20px;">
+                            <li><strong>Profile:</strong> View and edit your personal information</li>
+                            <li><strong>About:</strong> Learn about iOS 26 Liquid Glass technology</li>
+                            <li><strong>Settings:</strong> Customize your dashboard experience</li>
+                            <li><strong>Contact:</strong> Get in touch with our support team</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <button class="ios-button logout-btn" id="logoutButton">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
     </div>
-  </section>
 
-</div>
-
-<div class="light-pool"></div>
-
-<script>
-/* ================= LIQUID LIGHT (VISCOUS) ================= */
-document.querySelectorAll(".liquid-glass").forEach(glass => {
-  let targetX = 50, targetY = 50;
-  let currentX = 50, currentY = 50;
-
-  glass.addEventListener("pointermove", e => {
-    const r = glass.getBoundingClientRect();
-    targetX = ((e.clientX - r.left) / r.width) * 100;
-    targetY = ((e.clientY - r.top) / r.height) * 100;
-  });
-
-  function animate() {
-    currentX += (targetX - currentX) * 0.08;
-    currentY += (targetY - currentY) * 0.08;
-    glass.style.setProperty("--x", currentX + "%");
-    glass.style.setProperty("--y", currentY + "%");
-    requestAnimationFrame(animate);
-  }
-  animate();
-});
-
-/* ================= iOS BUTTON PRESS ================= */
-document.querySelectorAll(".ios-btn").forEach(btn => {
-  let downTime = 0;
-
-  btn.addEventListener("pointerdown", () => {
-    downTime = performance.now();
-    btn.style.transform = "scale(0.94)";
-  });
-
-  btn.addEventListener("pointerup", () => {
-    btn.style.transition =
-      "transform 0.45s cubic-bezier(.22,1.35,.25,1)";
-    btn.style.transform = "scale(1)";
-  });
-
-  btn.addEventListener("pointerleave", () => {
-    btn.style.transform = "scale(1)";
-  });
-});
-</script>
-
+    <script>
+        // DOM Elements
+        const loginScreen = document.getElementById('loginScreen');
+        const dashboardScreen = document.getElementById('dashboardScreen');
+        const loginButton = document.getElementById('loginButton');
+        const logoutButton = document.getElementById('logoutButton');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const greetingText = document.getElementById('greetingText');
+        const userAvatar = document.getElementById('userAvatar');
+        const menuItems = document.querySelectorAll('.menu-item');
+        const contentTitle = document.getElementById('contentTitle');
+        const contentText = document.getElementById('contentText');
+        
+        // Content for different dashboard sections
+        const dashboardContent = {
+            home: {
+                title: "Home",
+                content: `
+                    <p>Welcome to your iOS 26 Liquid Glass dashboard. This interface features the frosted glass effect with dynamic blurring and vibrant accents.</p>
+                    <br>
+                    <p>Navigate through the menu to explore different sections:</p>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li><strong>Profile:</strong> View and edit your personal information</li>
+                        <li><strong>About:</strong> Learn about iOS 26 Liquid Glass technology</li>
+                        <li><strong>Settings:</strong> Customize your dashboard experience</li>
+                        <li><strong>Contact:</strong> Get in touch with our support team</li>
+                    </ul>
+                    <br>
+                    <p><strong>Recent Activity:</strong></p>
+                    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin-top: 10px;">
+                        <p><i class="fas fa-sign-in-alt" style="margin-right: 10px;"></i> You logged in successfully</p>
+                        <p><i class="far fa-clock" style="margin-right: 10px;"></i> Last login: 2 hours ago</p>
+                    </div>
+                `
+            },
+            profile: {
+                title: "Profile",
+                content: `
+                    <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                        <div style="width: 80px; height: 80px; border-radius: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; justify-content: center; align-items: center; font-size: 32px; font-weight: bold; margin-right: 20px;">
+                            ${userAvatar.textContent}
+                        </div>
+                        <div>
+                            <h3 style="margin-bottom: 5px;">${usernameInput.value || 'Admin'}</h3>
+                            <p style="color: rgba(255,255,255,0.7);">Premium User</p>
+                            <p style="color: rgba(255,255,255,0.7); font-size: 14px;">Member since: 2023</p>
+                        </div>
+                    </div>
+                    
+                    <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; margin-bottom: 20px;">
+                        <h4 style="margin-bottom: 10px;">Account Details</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div>
+                                <p style="color: rgba(255,255,255,0.7); font-size: 14px;">Email</p>
+                                <p>${usernameInput.value || 'admin'}@ios26.com</p>
+                            </div>
+                            <div>
+                                <p style="color: rgba(255,255,255,0.7); font-size: 14px;">Account Type</p>
+                                <p>Premium</p>
+                            </div>
+                            <div>
+                                <p style="color: rgba(255,255,255,0.7); font-size: 14px;">Storage</p>
+                                <p>15.2 GB / 50 GB</p>
+                            </div>
+                            <div>
+                                <p style="color: rgba(255,255,255,0.7); font-size: 14px;">Theme</p>
+                                <p>Liquid Glass</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="ios-button" style="padding: 15px; font-size: 16px; margin-top: 10px;">
+                        <i class="fas fa-edit" style="margin-right: 10px;"></i> Edit Profile
+                    </button>
+                `
+            },
+            about: {
+                title: "About iOS 26",
+                content: `
+                    <p>iOS 26 Liquid Glass represents the next evolution in user interface design, featuring advanced visual effects and seamless interactions.</p>
+                    <br>
+                    <p><strong>Key Features:</strong></p>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>Dynamic frosted glass effect with real-time blurring</li>
+                        <li>Liquid animations and smooth transitions</li>
+                        <li>Advanced haptic feedback simulation</li>
+                        <li>Adaptive color themes based on content</li>
+                        <li>Energy-efficient rendering</li>
+                    </ul>
+                    <br>
+                    <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; margin-top: 15px;">
+                        <h4 style="margin-bottom: 10px;">Version Information</h4>
+                        <p><strong>iOS Version:</strong> 26.0.1 (Liquid Glass Edition)</p>
+                        <p><strong>Release Date:</strong> September 2024</p>
+                        <p><strong>Device Compatibility:</strong> iPhone 12 and later</p>
+                    </div>
+                    <br>
+                    <p>The Liquid Glass interface uses advanced compositing techniques to create the illusion of depth and transparency while maintaining optimal performance.</p>
+                `
+            },
+            settings: {
+                title: "Settings",
+                content: `
+                    <p>Customize your iOS 26 Liquid Glass experience with these settings.</p>
+                    
+                    <div style="margin-top: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <div>
+                                <h4 style="margin-bottom: 5px;">Blur Intensity</h4>
+                                <p style="color: rgba(255,255,255,0.7); font-size: 14px;">Adjust the glass effect intensity</p>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.1); padding: 5px 15px; border-radius: 10px;">High</div>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <div>
+                                <h4 style="margin-bottom: 5px;">Color Theme</h4>
+                                <p style="color: rgba(255,255,255,0.7); font-size: 14px;">Change the interface colors</p>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.1); padding: 5px 15px; border-radius: 10px;">Liquid Blue</div>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <div>
+                                <h4 style="margin-bottom: 5px;">Haptic Feedback</h4>
+                                <p style="color: rgba(255,255,255,0.7); font-size: 14px;">Toggle vibration feedback</p>
+                            </div>
+                            <div>
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px 0;">
+                            <div>
+                                <h4 style="margin-bottom: 5px;">Auto Dark Mode</h4>
+                                <p style="color: rgba(255,255,255,0.7); font-size: 14px;">Switch themes based on time</p>
+                            </div>
+                            <div>
+                                <label class="switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="ios-button" style="padding: 15px; font-size: 16px; margin-top: 20px; width: 100%;">
+                        <i class="fas fa-save" style="margin-right: 10px;"></i> Save Settings
+                    </button>
+                `
+            },
+            contact: {
+                title: "Contact",
+                content: `
+                    <p>Get in touch with our support team for assistance with iOS 26 Liquid Glass.</p>
+                    
+                    <div style="margin-top: 20px;">
+                        <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; margin-bottom: 20px;">
+                            <h4 style="margin-bottom: 15px;">Contact Information</h4>
+                            
+                            <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                                <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(255,255,255,0.1); display: flex; justify-content: center; align-items: center; margin-right: 15px;">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <p style="font-size: 14px; color: rgba(255,255,255,0.7);">Email</p>
+                                    <p>support@ios26.com</p>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                                <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(255,255,255,0.1); display: flex; justify-content: center; align-items: center; margin-right: 15px;">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <div>
+                                    <p style="font-size: 14px; color: rgba(255,255,255,0.7);">Phone</p>
+                                    <p>1-800-IOS-HELP</p>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center;">
+                                <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(255,255,255,0.1); display: flex; justify-content: center; align-items: center; margin-right: 15px;">
+                                    <i class="fas fa-globe"></i>
+                                </div>
+                                <div>
+                                    <p style="font-size: 14px; color: rgba(255,255,255,0.7);">Website</p>
+                                    <p>www.ios26.com/support</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px;">
+                            <h4 style="margin-bottom: 15px;">Send a Message</h4>
+                            
+                            <div style="margin-bottom: 15px;">
+                                <p style="margin-bottom: 8px; font-size: 14px;">Subject</p>
+                                <input type="text" class="ios-input" style="padding: 15px;" placeholder="Enter subject">
+                            </div>
+                            
+                            <div style="margin-bottom: 20px;">
+                                <p style="margin-bottom: 8px; font-size: 14px;">Message</p>
+                                <textarea class="ios-input" style="padding: 15px; height: 100px; resize: none;" placeholder="Enter your message"></textarea>
+                            </div>
+                            
+                            <button class="ios-button" style="padding: 15px; font-size: 16px; width: 100%;">
+                                <i class="fas fa-paper-plane" style="margin-right: 10px;"></i> Send Message
+                            </button>
+                        </div>
+                    </div>
+                `
+            }
+        };
+        
+        // Login function
+        loginButton.addEventListener('click', function() {
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+            
+            // Simple validation
+            if (!username || !password) {
+                alert('Please enter both username and password');
+                return;
+            }
+            
+            // Show greeting with username
+            const displayName = username || 'Admin';
+            greetingText.textContent = `Hello, ${displayName}`;
+            
+            // Set avatar initial
+            userAvatar.textContent = displayName.charAt(0).toUpperCase();
+            
+            // Transition to dashboard
+            loginScreen.classList.add('hidden');
+            dashboardScreen.classList.add('active');
+            dashboardScreen.classList.add('fade-in');
+            
+            // Set time display to update every minute
+            updateTime();
+            setInterval(updateTime, 60000);
+        });
+        
+        // Logout function
+        logoutButton.addEventListener('click', function() {
+            // Transition back to login
+            dashboardScreen.classList.remove('active');
+            loginScreen.classList.remove('hidden');
+            
+            // Clear inputs
+            usernameInput.value = '';
+            passwordInput.value = '';
+            
+            // Reset to home content
+            changeContent('home');
+            
+            // Reset active menu item
+            menuItems.forEach(item => {
+                if (item.dataset.content === 'home') {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        });
+        
+        // Allow login with Enter key
+        passwordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                loginButton.click();
+            }
+        });
+        
+        // Menu item click handlers
+        menuItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all items
+                menuItems.forEach(i => i.classList.remove('active'));
+                
+                // Add active class to clicked item
+                this.classList.add('active');
+                
+                // Change content based on clicked item
+                const contentKey = this.getAttribute('data-content');
+                changeContent(contentKey);
+            });
+        });
+        
+        // Function to change dashboard content
+        function changeContent(contentKey) {
+            const content = dashboardContent[contentKey];
+            if (content) {
+                contentTitle.textContent = content.title;
+                contentText.innerHTML = content.content;
+                
+                // Add fade animation
+                contentText.classList.remove('fade-in');
+                void contentText.offsetWidth; // Trigger reflow
+                contentText.classList.add('fade-in');
+            }
+        }
+        
+        // Function to update time in status bar
+        function updateTime() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            
+            // Format to 12-hour time
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // The hour '0' should be '12'
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            
+            const timeString = `${hours}:${minutes} ${ampm}`;
+            document.querySelector('.time').textContent = timeString;
+        }
+        
+        // Initialize with current time
+        updateTime();
+        
+        // Add some visual effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add liquid glass effect to inputs on focus
+            const inputs = document.querySelectorAll('.ios-input');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.style.transform = 'scale(1.02)';
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.parentElement.style.transform = 'scale(1)';
+                });
+            });
+            
+            // Pre-fill with demo credentials for easy testing
+            usernameInput.value = 'admin';
+            passwordInput.value = 'password';
+        });
+    </script>
 </body>
 </html>
