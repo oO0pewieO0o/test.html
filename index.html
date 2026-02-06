@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Liquid Glass – iOS 26 Style</title>
+<title>Liquid Glass – iOS 26</title>
 
 <style>
+/* ================= RESET ================= */
 * {
   box-sizing: border-box;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
@@ -14,44 +15,43 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background:
-    url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80")
-    center / cover no-repeat fixed;
   color: white;
+  background:
+    url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1800&q=80")
+    center / cover no-repeat fixed;
 }
 
-/* very light dim only */
+/* very light darkening */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.18);
+  background: rgba(0,0,0,0.15);
   z-index: -1;
 }
 
-/* ========== ULTRA CLEAR LIQUID GLASS ========== */
+/* ================= LIQUID GLASS ================= */
 .liquid-glass {
   position: relative;
   background:
     linear-gradient(
       140deg,
-      rgba(255,255,255,0.18),
+      rgba(255,255,255,0.16),
       rgba(255,255,255,0.03)
     );
-  backdrop-filter: blur(4px) saturate(140%);
-  -webkit-backdrop-filter: blur(4px) saturate(140%);
+  backdrop-filter: blur(3px) saturate(135%);
+  -webkit-backdrop-filter: blur(3px) saturate(135%);
   border-radius: 26px;
   border: 1px solid rgba(255,255,255,0.22);
 
   box-shadow:
     0 30px 60px rgba(0,0,0,0.35),
-    inset 0 1px 1px rgba(255,255,255,0.7);
+    inset 0 1px 1px rgba(255,255,255,0.75);
 
   overflow: hidden;
-  transition: transform 0.25s cubic-bezier(.2,.8,.2,1);
 }
 
-/* liquid highlight */
+/* liquid light */
 .liquid-glass::before {
   content: "";
   position: absolute;
@@ -59,14 +59,14 @@ body::before {
   background:
     radial-gradient(
       circle at var(--x, 50%) var(--y, 50%),
-      rgba(255,255,255,0.45),
+      rgba(255,255,255,0.5),
       transparent 55%
     );
   opacity: 0.45;
   pointer-events: none;
 }
 
-/* top edge gleam */
+/* curved edge highlight */
 .liquid-glass::after {
   content: "";
   position: absolute;
@@ -78,19 +78,19 @@ body::before {
       rgba(255,255,255,0.55),
       transparent 45%
     );
-  pointer-events: none;
   mix-blend-mode: overlay;
+  pointer-events: none;
 }
 
-/* ========== NAV ========== */
+/* ================= NAV ================= */
 nav {
   position: fixed;
   top: 22px;
   left: 50%;
   transform: translateX(-50%);
-  padding: 14px 26px;
+  padding: 14px 28px;
   display: flex;
-  gap: 22px;
+  gap: 24px;
   z-index: 100;
 }
 
@@ -101,7 +101,7 @@ nav a {
   opacity: 0.9;
 }
 
-/* ========== LAYOUT ========== */
+/* ================= LAYOUT ================= */
 .container {
   padding-top: 130px;
   width: min(1100px, 92%);
@@ -124,15 +124,18 @@ p {
   opacity: 0.95;
 }
 
-/* ========== iOS 26 BUTTONS ========== */
+/* ================= iOS BUTTON ================= */
 .glass-button {
-  position: relative;
-  padding: 14px 22px;
+  display: inline-block;
+  padding: 14px 24px;
   border-radius: 999px;
+  margin-right: 10px;
+  margin-top: 10px;
+
   background:
     linear-gradient(
       140deg,
-      rgba(255,255,255,0.35),
+      rgba(255,255,255,0.38),
       rgba(255,255,255,0.08)
     );
   border: 1px solid rgba(255,255,255,0.35);
@@ -141,31 +144,19 @@ p {
   cursor: pointer;
   user-select: none;
 
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
 
   box-shadow:
-    0 12px 24px rgba(0,0,0,0.35),
-    inset 0 1px 1px rgba(255,255,255,0.8);
+    0 14px 28px rgba(0,0,0,0.35),
+    inset 0 1px 1px rgba(255,255,255,0.85);
 
   transition:
-    transform 0.2s cubic-bezier(.2,.8,.2,1),
-    box-shadow 0.2s ease,
-    background 0.2s ease;
+    transform 0.15s ease-out,
+    box-shadow 0.15s ease-out;
 }
 
-.glass-button:hover {
-  transform: translateY(-1px);
-}
-
-.glass-button:active {
-  transform: scale(0.96);
-  box-shadow:
-    0 6px 12px rgba(0,0,0,0.35),
-    inset 0 2px 4px rgba(0,0,0,0.3);
-}
-
-/* ========== PROFILE ========== */
+/* ================= PROFILE ================= */
 .profile {
   display: grid;
   grid-template-columns: 120px 1fr;
@@ -178,25 +169,25 @@ p {
   height: 120px;
   border-radius: 50%;
   background:
-    radial-gradient(circle at 30% 20%, #ffffffcc, transparent),
+    radial-gradient(circle at 30% 20%, #ffffffdd, transparent),
     linear-gradient(135deg, #6dd5ed, #2193b0);
   box-shadow:
-    inset 0 2px 6px rgba(255,255,255,0.8),
-    0 25px 45px rgba(0,0,0,0.4);
+    inset 0 2px 6px rgba(255,255,255,0.9),
+    0 25px 45px rgba(0,0,0,0.45);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 3rem;
 }
 
-/* ambient light */
+/* ambient glow */
 .light-pool {
   position: fixed;
-  bottom: -150px;
+  bottom: -160px;
   left: 50%;
   transform: translateX(-50%);
-  width: 700px;
-  height: 280px;
+  width: 720px;
+  height: 300px;
   background:
     radial-gradient(circle, rgba(255,255,255,0.25), transparent 70%);
   pointer-events: none;
@@ -217,20 +208,20 @@ p {
   <section id="home" class="liquid-glass section">
     <h1>🏠 Home</h1>
     <p>
-      Almost no blur. Mostly light, refraction, and motion —
-      this is where liquid glass starts to feel real.
+      Ultra-clear liquid glass with real light behavior.
+      Minimal blur, maximum depth.
     </p>
-    <div style="margin-top:20px;">
-      <span class="glass-button">Explore</span>
-      <span class="glass-button">Refresh</span>
+    <div>
+      <span class="glass-button ios-btn">Explore</span>
+      <span class="glass-button ios-btn">Refresh</span>
     </div>
   </section>
 
   <section id="about" class="liquid-glass section">
     <h1>ℹ️ About</h1>
     <p>
-      iOS 26 interactions rely on pressure, spring motion,
-      and optical feedback instead of heavy visual effects.
+      JavaScript adds viscosity, pressure, and spring physics —
+      the difference between looking like iOS and *feeling* like iOS.
     </p>
   </section>
 
@@ -240,11 +231,10 @@ p {
       <div class="avatar">R</div>
       <div>
         <p><strong>Name:</strong> Rari</p>
-        <p><strong>Interaction Style:</strong> iOS 26 Liquid</p>
-        <p>Clear, responsive, pressure-based UI.</p>
-        <div style="margin-top:16px;">
-          <span class="glass-button">Edit</span>
-          <span class="glass-button">Settings</span>
+        <p><strong>Material:</strong> iOS 26 Liquid Glass</p>
+        <div>
+          <span class="glass-button ios-btn">Edit</span>
+          <span class="glass-button ios-btn">Settings</span>
         </div>
       </div>
     </div>
@@ -255,11 +245,44 @@ p {
 <div class="light-pool"></div>
 
 <script>
-document.querySelectorAll(".liquid-glass").forEach(el => {
-  el.addEventListener("mousemove", e => {
-    const r = el.getBoundingClientRect();
-    el.style.setProperty("--x", ((e.clientX - r.left) / r.width) * 100 + "%");
-    el.style.setProperty("--y", ((e.clientY - r.top) / r.height) * 100 + "%");
+/* ================= LIQUID LIGHT (VISCOUS) ================= */
+document.querySelectorAll(".liquid-glass").forEach(glass => {
+  let targetX = 50, targetY = 50;
+  let currentX = 50, currentY = 50;
+
+  glass.addEventListener("pointermove", e => {
+    const r = glass.getBoundingClientRect();
+    targetX = ((e.clientX - r.left) / r.width) * 100;
+    targetY = ((e.clientY - r.top) / r.height) * 100;
+  });
+
+  function animate() {
+    currentX += (targetX - currentX) * 0.08;
+    currentY += (targetY - currentY) * 0.08;
+    glass.style.setProperty("--x", currentX + "%");
+    glass.style.setProperty("--y", currentY + "%");
+    requestAnimationFrame(animate);
+  }
+  animate();
+});
+
+/* ================= iOS BUTTON PRESS ================= */
+document.querySelectorAll(".ios-btn").forEach(btn => {
+  let downTime = 0;
+
+  btn.addEventListener("pointerdown", () => {
+    downTime = performance.now();
+    btn.style.transform = "scale(0.94)";
+  });
+
+  btn.addEventListener("pointerup", () => {
+    btn.style.transition =
+      "transform 0.45s cubic-bezier(.22,1.35,.25,1)";
+    btn.style.transform = "scale(1)";
+  });
+
+  btn.addEventListener("pointerleave", () => {
+    btn.style.transform = "scale(1)";
   });
 });
 </script>
