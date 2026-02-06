@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Liquid Glass Dashboard</title>
+<title>Liquid Glass – iOS 26 Style</title>
 
 <style>
 * {
@@ -20,38 +20,38 @@ body {
   color: white;
 }
 
-/* subtle vignette only */
+/* very light dim only */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.25);
+  background: rgba(0,0,0,0.18);
   z-index: -1;
 }
 
-/* ========== TRUE LIQUID GLASS ========== */
+/* ========== ULTRA CLEAR LIQUID GLASS ========== */
 .liquid-glass {
   position: relative;
   background:
     linear-gradient(
       140deg,
-      rgba(255,255,255,0.22),
-      rgba(255,255,255,0.04)
+      rgba(255,255,255,0.18),
+      rgba(255,255,255,0.03)
     );
-  backdrop-filter: blur(10px) saturate(160%);
-  -webkit-backdrop-filter: blur(10px) saturate(160%);
+  backdrop-filter: blur(4px) saturate(140%);
+  -webkit-backdrop-filter: blur(4px) saturate(140%);
   border-radius: 26px;
+  border: 1px solid rgba(255,255,255,0.22);
 
-  /* glass thickness illusion */
-  border: 1px solid rgba(255,255,255,0.25);
   box-shadow:
-    0 35px 70px rgba(0,0,0,0.35),
-    inset 0 1px 1px rgba(255,255,255,0.65);
+    0 30px 60px rgba(0,0,0,0.35),
+    inset 0 1px 1px rgba(255,255,255,0.7);
 
   overflow: hidden;
+  transition: transform 0.25s cubic-bezier(.2,.8,.2,1);
 }
 
-/* moving liquid highlight */
+/* liquid highlight */
 .liquid-glass::before {
   content: "";
   position: absolute;
@@ -62,11 +62,11 @@ body::before {
       rgba(255,255,255,0.45),
       transparent 55%
     );
-  opacity: 0.5;
+  opacity: 0.45;
   pointer-events: none;
 }
 
-/* curved glass edge */
+/* top edge gleam */
 .liquid-glass::after {
   content: "";
   position: absolute;
@@ -78,8 +78,8 @@ body::before {
       rgba(255,255,255,0.55),
       transparent 45%
     );
-  mix-blend-mode: overlay;
   pointer-events: none;
+  mix-blend-mode: overlay;
 }
 
 /* ========== NAV ========== */
@@ -88,21 +88,17 @@ nav {
   top: 22px;
   left: 50%;
   transform: translateX(-50%);
-  padding: 14px 28px;
+  padding: 14px 26px;
   display: flex;
-  gap: 26px;
+  gap: 22px;
   z-index: 100;
 }
 
 nav a {
-  text-decoration: none;
   color: white;
+  text-decoration: none;
   font-weight: 500;
   opacity: 0.9;
-}
-
-nav a:hover {
-  opacity: 1;
 }
 
 /* ========== LAYOUT ========== */
@@ -116,11 +112,6 @@ nav a:hover {
 
 .section {
   padding: 34px;
-  transition: transform 0.25s ease;
-}
-
-.section:hover {
-  transform: translateY(-5px);
 }
 
 h1 {
@@ -131,6 +122,47 @@ h1 {
 p {
   line-height: 1.6;
   opacity: 0.95;
+}
+
+/* ========== iOS 26 BUTTONS ========== */
+.glass-button {
+  position: relative;
+  padding: 14px 22px;
+  border-radius: 999px;
+  background:
+    linear-gradient(
+      140deg,
+      rgba(255,255,255,0.35),
+      rgba(255,255,255,0.08)
+    );
+  border: 1px solid rgba(255,255,255,0.35);
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  user-select: none;
+
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+
+  box-shadow:
+    0 12px 24px rgba(0,0,0,0.35),
+    inset 0 1px 1px rgba(255,255,255,0.8);
+
+  transition:
+    transform 0.2s cubic-bezier(.2,.8,.2,1),
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.glass-button:hover {
+  transform: translateY(-1px);
+}
+
+.glass-button:active {
+  transform: scale(0.96);
+  box-shadow:
+    0 6px 12px rgba(0,0,0,0.35),
+    inset 0 2px 4px rgba(0,0,0,0.3);
 }
 
 /* ========== PROFILE ========== */
@@ -157,10 +189,10 @@ p {
   font-size: 3rem;
 }
 
-/* ambient light pool */
+/* ambient light */
 .light-pool {
   position: fixed;
-  bottom: -140px;
+  bottom: -150px;
   left: 50%;
   transform: translateX(-50%);
   width: 700px;
@@ -185,16 +217,20 @@ p {
   <section id="home" class="liquid-glass section">
     <h1>🏠 Home</h1>
     <p>
-      Reduced blur and higher transparency let the background
-      pass through, creating a clear, liquid-like glass surface.
+      Almost no blur. Mostly light, refraction, and motion —
+      this is where liquid glass starts to feel real.
     </p>
+    <div style="margin-top:20px;">
+      <span class="glass-button">Explore</span>
+      <span class="glass-button">Refresh</span>
+    </div>
   </section>
 
   <section id="about" class="liquid-glass section">
     <h1>ℹ️ About</h1>
     <p>
-      Liquid glass prioritizes refraction and highlights over opacity.
-      You see the world through it — slightly bent, never obscured.
+      iOS 26 interactions rely on pressure, spring motion,
+      and optical feedback instead of heavy visual effects.
     </p>
   </section>
 
@@ -204,10 +240,12 @@ p {
       <div class="avatar">R</div>
       <div>
         <p><strong>Name:</strong> Rari</p>
-        <p><strong>Material:</strong> Clear Liquid Glass</p>
-        <p>
-          Crisp, transparent, reactive UI with depth and light.
-        </p>
+        <p><strong>Interaction Style:</strong> iOS 26 Liquid</p>
+        <p>Clear, responsive, pressure-based UI.</p>
+        <div style="margin-top:16px;">
+          <span class="glass-button">Edit</span>
+          <span class="glass-button">Settings</span>
+        </div>
       </div>
     </div>
   </section>
@@ -217,17 +255,11 @@ p {
 <div class="light-pool"></div>
 
 <script>
-document.querySelectorAll(".liquid-glass").forEach(glass => {
-  glass.addEventListener("mousemove", e => {
-    const r = glass.getBoundingClientRect();
-    glass.style.setProperty(
-      "--x",
-      ((e.clientX - r.left) / r.width) * 100 + "%"
-    );
-    glass.style.setProperty(
-      "--y",
-      ((e.clientY - r.top) / r.height) * 100 + "%"
-    );
+document.querySelectorAll(".liquid-glass").forEach(el => {
+  el.addEventListener("mousemove", e => {
+    const r = el.getBoundingClientRect();
+    el.style.setProperty("--x", ((e.clientX - r.left) / r.width) * 100 + "%");
+    el.style.setProperty("--y", ((e.clientY - r.top) / r.height) * 100 + "%");
   });
 });
 </script>
