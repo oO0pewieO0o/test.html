@@ -1,164 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iOS 26 Liquid Dashboard - Sharp UI</title>
-    <style>
-        :root {
-            --bg-color: #f0f2f5;
-            --text-color: #1d1d1f;
-            --accent: #007AFF;
-            --glass-opacity: 0.3;
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Liquid Glass Dashboard</title>
 
-        [data-theme="dark"] {
-            --bg-color: #000000;
-            --text-color: #ffffff;
-            --accent: #0A84FF;
-            --glass-opacity: 0.15;
-        }
+<style>
+/* ===== Base ===== */
+* {
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
 
-        body, html {
-            margin: 0;
-            height: 100vh;
-            font-family: -apple-system, system-ui, sans-serif;
-            background: var(--bg-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            transition: background 0.5s ease;
-        }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top left, #4f9cff, #1b1f3b);
+  color: #fff;
+  overflow-x: hidden;
+}
 
-        /* Animated Background Orbs */
-        .orb {
-            position: absolute;
-            width: 450px;
-            height: 450px;
-            border-radius: 50%;
-            filter: blur(60px);
-            z-index: 1;
-            animation: float 15s infinite alternate ease-in-out;
-        }
-        .orb-1 { background: #ff3b30; top: -10%; left: -5%; }
-        .orb-2 { background: #007aff; bottom: -5%; right: -5%; animation-delay: -7s; }
+/* ===== Glass Effect ===== */
+.glass {
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.25),
+    rgba(255,255,255,0.05)
+  );
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.3);
+  box-shadow:
+    0 20px 40px rgba(0,0,0,0.25),
+    inset 0 1px 1px rgba(255,255,255,0.4);
+}
 
-        @keyframes float {
-            from { transform: translate(0, 0); }
-            to { transform: translate(150px, 50px); }
-        }
+/* ===== Navbar ===== */
+nav {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  display: flex;
+  gap: 20px;
+  z-index: 100;
+}
 
-        /* THE DASHBOARD CONTAINER */
-        .dashboard {
-            position: relative;
-            z-index: 10;
-            width: 85vw;
-            max-width: 1000px;
-            height: 75vh;
-            display: grid;
-            grid-template-columns: 240px 1fr;
-            border-radius: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 40px 100px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  opacity: 0.85;
+}
 
-        /* THE LIQUID LAYER (The "Bent" Part) */
-        /* We apply the filter only here so it doesn't warp your text! */
-        .dashboard::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(255, 255, 255, var(--glass-opacity));
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            filter: url(#liquid-refraction); /* The SVG warp */
-            z-index: -1; /* Keep it behind the content */
-        }
+nav a:hover {
+  opacity: 1;
+}
 
-        /* Sidebar & Content Style (Sharp and readable) */
-        .sidebar {
-            padding: 40px 20px;
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-            z-index: 2;
-        }
+/* ===== Layout ===== */
+.container {
+  padding-top: 120px;
+  display: grid;
+  gap: 40px;
+  width: min(1100px, 90%);
+  margin: auto;
+}
 
-        .main-content {
-            padding: 60px;
-            z-index: 2;
-            position: relative;
-        }
+/* ===== Sections ===== */
+.section {
+  padding: 30px;
+  transition: transform 0.3s ease;
+}
 
-        .nav-item {
-            padding: 12px 20px;
-            margin: 5px 0;
-            border-radius: 12px;
-            cursor: pointer;
-            color: var(--text-color);
-            font-weight: 500;
-            transition: 0.2s;
-        }
+.section:hover {
+  transform: translateY(-4px);
+}
 
-        .nav-item:hover { background: rgba(255, 255, 255, 0.2); }
-        .nav-item.active { background: var(--accent); color: white; }
+h1 {
+  margin-top: 0;
+  font-size: 2rem;
+}
 
-        .theme-btn {
-            position: absolute;
-            top: 40px;
-            right: 40px;
-            padding: 10px 20px;
-            border-radius: 20px;
-            border: none;
-            background: var(--text-color);
-            color: var(--bg-color);
-            cursor: pointer;
-            font-weight: bold;
-        }
+p {
+  line-height: 1.6;
+  opacity: 0.9;
+}
 
-        h1 { font-size: 2.5rem; color: var(--text-color); }
-        p { color: var(--text-color); opacity: 0.8; line-height: 1.6; }
+/* ===== Profile Card ===== */
+.profile {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 20px;
+  align-items: center;
+}
 
-    </style>
+.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6dd5ed, #2193b0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+}
+
+/* ===== Footer Glow ===== */
+.glow {
+  position: fixed;
+  inset: auto 0 0 0;
+  height: 200px;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.25), transparent);
+  pointer-events: none;
+}
+</style>
 </head>
+
 <body>
 
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
+<!-- Navigation -->
+<nav class="glass">
+  <a href="#home">Home</a>
+  <a href="#about">About</a>
+  <a href="#profile">Profile</a>
+</nav>
 
-    <svg style="display: none;">
-        <filter id="liquid-refraction">
-            <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="2" result="noise" />
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="25" xChannelSelector="R" yChannelSelector="G" />
-        </filter>
-    </svg>
+<!-- Main Content -->
+<div class="container">
 
-    <div class="dashboard" id="ui-root">
-        <aside class="sidebar">
-            <div style="font-weight: 900; font-size: 1.4rem; margin-bottom: 30px;">iOS 26</div>
-            <div class="nav-item active">Home</div>
-            <div class="nav-item">Profile</div>
-            <div class="nav-item">About</div>
-            <div class="nav-item">Contact</div>
-        </aside>
+  <!-- Home -->
+  <section id="home" class="glass section">
+    <h1>🏠 Home</h1>
+    <p>
+      Welcome to your Liquid Glass–inspired dashboard.
+      This interface mimics Apple’s Liquid Glass material using
+      blur, translucency, depth, and soft lighting.
+    </p>
+  </section>
 
-        <main class="main-content">
-            <button class="theme-btn" onclick="toggleMode()">Switch Mode</button>
-            <h1>Refined Liquid Glass</h1>
-            <p>Notice how the background "warps" and "bends" as the red and blue circles move, but this text and the buttons remain perfectly sharp and readable.</p>
-            <div style="margin-top: 30px; height: 100px; width: 100%; border-radius: 20px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);"></div>
-        </main>
+  <!-- About -->
+  <section id="about" class="glass section">
+    <h1>ℹ️ About</h1>
+    <p>
+      Liquid Glass is a dynamic visual material that blends background
+      content, light, and motion. On the web, we recreate it using
+      <strong>backdrop-filter</strong>, layered gradients, and subtle shadows.
+    </p>
+    <p>
+      This dashboard demonstrates how modern CSS can achieve
+      Apple-like UI aesthetics without JavaScript frameworks.
+    </p>
+  </section>
+
+  <!-- Profile -->
+  <section id="profile" class="glass section">
+    <h1>👤 Profile</h1>
+    <div class="profile">
+      <div class="avatar">R</div>
+      <div>
+        <p><strong>Name:</strong> Rari</p>
+        <p><strong>Role:</strong> Dashboard User</p>
+        <p>
+          Passionate about clean UI, modern effects,
+          and elegant design systems.
+        </p>
+      </div>
     </div>
+  </section>
 
-    <script>
-        function toggleMode() {
-            const body = document.body;
-            if (body.hasAttribute('data-theme')) {
-                body.removeAttribute('data-theme');
-            } else {
-                body.setAttribute('data-theme', 'dark');
-            }
-        }
-    </script>
+</div>
+
+<div class="glow"></div>
+
 </body>
 </html>
