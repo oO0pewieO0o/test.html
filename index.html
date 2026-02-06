@@ -3,203 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iOS 26 Glass Dashboard</title>
+    <title>iOS 26 Liquid Glass Dashboard</title>
     <style>
         :root {
-            /* Light Mode Variables */
-            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            --glass-bg: rgba(255, 255, 255, 0.4);
-            --glass-border: rgba(255, 255, 255, 0.5);
+            --bg-color: #e0e5ec;
+            --glass-bg: rgba(255, 255, 255, 0.15);
             --text-color: #1d1d1f;
-            --accent-color: #007AFF;
-            --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            --accent: #007AFF;
         }
 
         [data-theme="dark"] {
-            /* Dark Mode Variables */
-            --bg-gradient: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-            --glass-bg: rgba(0, 0, 0, 0.4);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --bg-color: #0a0a0c;
+            --glass-bg: rgba(255, 255, 255, 0.05);
             --text-color: #f5f5f7;
-            --accent-color: #0A84FF;
-            --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+            --accent: #0A84FF;
         }
 
-        * {
+        body, html {
             margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
-        }
-
-        body {
-            height: 100vh;
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro", sans-serif;
+            background-color: var(--bg-color);
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: var(--bg-gradient);
-            background-attachment: fixed;
-            color: var(--text-color);
-            overflow: hidden;
+            transition: background 0.5s ease;
         }
 
-        /* The Glass Container */
+        /* Animated Background Orbs for Refraction Visibility */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            z-index: 0;
+            animation: move 20s infinite alternate;
+        }
+        .orb-1 { width: 400px; height: 400px; background: #ff3b30; top: -10%; left: -10%; }
+        .orb-2 { width: 500px; height: 500px; background: #007aff; bottom: -10%; right: -10%; animation-delay: -5s; }
+        .orb-3 { width: 300px; height: 300px; background: #34c759; top: 20%; right: 20%; animation-delay: -10s; }
+
+        @keyframes move {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(100px, 100px) scale(1.2); }
+        }
+
+        /* The Liquid Glass Dashboard */
         .dashboard {
-            width: 90%;
-            max-width: 1000px;
+            position: relative;
+            z-index: 10;
+            width: 90vw;
+            max-width: 1100px;
             height: 80vh;
-            background: var(--glass-bg);
-            backdrop-filter: blur(25px) saturate(180%);
-            -webkit-backdrop-filter: blur(25px) saturate(180%);
-            border: 1px solid var(--glass-border);
-            border-radius: 40px;
-            box-shadow: var(--card-shadow);
             display: grid;
-            grid-template-columns: 250px 1fr;
+            grid-template-columns: 260px 1fr;
+            background: var(--glass-bg);
+            
+            /* THE LIQUID TECHNIQUE [00:01:26] */
+            /* We use a custom SVG filter for refraction and a light blur */
+            filter: url(#liquid-refraction) brightness(1.1) contrast(1.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 44px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             overflow: hidden;
+            color: var(--text-color);
         }
 
-        /* Sidebar Navigation */
+        /* Sidebar & Nav */
         .sidebar {
             padding: 40px 20px;
-            border-right: 1px solid var(--glass-border);
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .nav-item {
-            padding: 15px 20px;
-            border-radius: 15px;
+            padding: 14px 20px;
+            margin-bottom: 8px;
+            border-radius: 16px;
             cursor: pointer;
-            font-weight: 500;
             display: flex;
             align-items: center;
             gap: 12px;
-            text-decoration: none;
-            color: var(--text-color);
+            font-weight: 500;
+            transition: 0.2s;
         }
 
-        .nav-item:hover, .nav-item.active {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateX(5px);
-        }
+        .nav-item:hover { background: rgba(255, 255, 255, 0.2); }
+        .nav-item.active { background: var(--accent); color: white; }
 
-        /* Main Content Area */
-        .main-content {
+        /* Content Area */
+        .main {
             padding: 60px;
-            overflow-y: auto;
             position: relative;
         }
 
-        h1 { font-size: 2.5rem; margin-bottom: 20px; }
-        p { line-height: 1.6; opacity: 0.9; }
-
-        /* Controls / Theme Toggle */
-        .controls {
+        .theme-toggle {
             position: absolute;
-            top: 30px;
+            top: 40px;
             right: 40px;
-        }
-
-        .toggle-btn {
-            background: var(--accent-color);
-            color: white;
+            background: var(--text-color);
+            color: var(--bg-color);
             border: none;
-            padding: 10px 20px;
-            border-radius: 50px;
-            cursor: pointer;
+            padding: 10px 22px;
+            border-radius: 20px;
             font-weight: 600;
-            box-shadow: 0 4px 15px rgba(0, 122, 255, 0.3);
+            cursor: pointer;
         }
 
-        .toggle-btn:hover {
-            opacity: 0.9;
-            transform: scale(1.05);
-        }
+        .content-section { display: none; animation: slideUp 0.4s ease; }
+        .content-section.active { display: block; }
 
-        /* Content Sections */
-        .section { display: none; }
-        .section.active { display: block; animation: fadeIn 0.5s ease; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Profile Card Preview */
-        .profile-card {
-            background: rgba(255,255,255,0.1);
-            padding: 30px;
-            border-radius: 25px;
-            margin-top: 20px;
-            border: 1px solid var(--glass-border);
-        }
+        h1 { font-size: 3rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 15px; }
+        p { font-size: 1.2rem; opacity: 0.8; max-width: 500px; line-height: 1.5; }
+
     </style>
 </head>
 <body>
 
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <svg style="position: absolute; width: 0; height: 0;">
+        <filter id="liquid-refraction">
+            <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="3" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="30" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+    </svg>
+
     <div class="dashboard">
-        <nav class="sidebar">
-            <h2 style="margin-bottom: 30px; padding-left: 20px;">iOS 26</h2>
-            <a href="#" class="nav-item active" onclick="showSection('home')">🏠 Home</a>
-            <a href="#" class="nav-item" onclick="showSection('profile')">👤 Profile</a>
-            <a href="#" class="nav-item" onclick="showSection('about')">ℹ️ About</a>
-            <a href="#" class="nav-item" onclick="showSection('contact')">✉️ Contact</a>
-        </nav>
+        <aside class="sidebar">
+            <div style="font-size: 1.5rem; font-weight: 800; margin-bottom: 40px; padding-left: 20px;">iOS 26</div>
+            <div class="nav-item active" onclick="tab('home')">Home</div>
+            <div class="nav-item" onclick="tab('profile')">Profile</div>
+            <div class="nav-item" onclick="tab('about')">About</div>
+            <div class="nav-item" onclick="tab('contact')">Contact</div>
+        </aside>
 
-        <main class="main-content">
-            <div class="controls">
-                <button class="toggle-btn" id="themeToggle">Switch Theme</button>
-            </div>
+        <main class="main">
+            <button class="theme-toggle" onclick="toggleTheme()">Appearance</button>
 
-            <section id="home" class="section active">
-                <h1>Welcome back.</h1>
-                <p>Your workspace is ready. Everything you need is blurred and beautiful.</p>
+            <section id="home" class="content-section active">
+                <h1>Hello, Future.</h1>
+                <p>Experience the liquid glass interface. Notice how the colors behind the panel distort and flow.</p>
             </section>
 
-            <section id="profile" class="section">
-                <h1>Your Profile</h1>
-                <div class="profile-card">
-                    <p><strong>Name:</strong> User 2026</p>
-                    <p><strong>Status:</strong> Synced with Vision Pro</p>
-                </div>
+            <section id="profile" class="content-section">
+                <h1>Your Identity</h1>
+                <p>Managed via Secure Enclave. Your data is refracted, encrypted, and personal.</p>
             </section>
 
-            <section id="about" class="section">
-                <h1>About OS 26</h1>
-                <p>Designed with "Hyper-Glass" technology, focusing on depth, translucency, and spatial hierarchy.</p>
+            <section id="about" class="content-section">
+                <h1>Liquid Glass</h1>
+                <p>Using SVG Displacement Maps [00:00:41] to simulate light passing through thick crystal.</p>
             </section>
 
-            <section id="contact" class="section">
-                <h1>Contact Support</h1>
-                <p>Reach out via Neural Link or standard Sub-space frequencies.</p>
+            <section id="contact" class="content-section">
+                <h1>Get in Touch</h1>
+                <p>Support is available 24/7 via Spatial Audio or Neural Link.</p>
             </section>
         </main>
     </div>
 
     <script>
-        // Section Navigation Logic
-        function showSection(id) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        function tab(id) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            
             document.getElementById(id).classList.add('active');
             event.currentTarget.classList.add('active');
         }
 
-        // Dark/Light Mode Logic
-        const toggleBtn = document.getElementById('themeToggle');
-        const body = document.body;
-
-        toggleBtn.addEventListener('click', () => {
-            if (body.getAttribute('data-theme') === 'dark') {
+        function toggleTheme() {
+            const body = document.body;
+            if (body.hasAttribute('data-theme')) {
                 body.removeAttribute('data-theme');
             } else {
                 body.setAttribute('data-theme', 'dark');
             }
-        });
+        }
     </script>
 </body>
 </html>
